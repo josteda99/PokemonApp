@@ -1,5 +1,6 @@
 <template>
-  <div class="Welcome">
+  <div class="Welcome" style="background_color=#f9f9f9">
+    <Loader v-if="showLoader" />
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-6 col-sm-12">
@@ -18,6 +19,7 @@
               type="button"
               v-on:click="goToList()"
               class="btnGet d-flex justify-content-center"
+              id="btnToList"
             >
               <p class="getStart">Get Started</p>
             </button>
@@ -29,11 +31,29 @@
 </template>
 
 <script>
+import Loader from "@/components/Loader.vue";
 export default {
   name: "Welcome",
+  components: {
+    Loader,
+  },
+  data: function () {
+    return {
+      showLoader: true,
+    };
+  },
+  mounted() {
+    this.showToggle();
+  },
   methods: {
+    showToggle() {
+      setTimeout(() => {
+        this.showLoader = false;
+      }, 3000);
+    },
     goToList() {
       location.href = "List";
+      document.getElementById("btnToList").style.background = "#C00E20";
     },
   },
 };

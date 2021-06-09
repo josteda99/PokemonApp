@@ -40,7 +40,6 @@
 
 <script>
 export default {
-  //   props: ["option"],
   data: function () {
     return { option: "" };
   },

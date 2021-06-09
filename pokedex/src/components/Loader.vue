@@ -1,5 +1,5 @@
 <template>
-  <div class="Loader">
+  <div class="Loader" style="background_color=#f9f9f9">
     <div class="img">
       <img
         src="../assets/loader.png"
@@ -16,12 +16,15 @@ export default {};
 </script>
 
 <style>
-* {
-  background-color: #f5f5f5;
-}
-
-body {
-  overflow: hidden;
+.loader {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .img {
@@ -29,6 +32,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  /* animation-name: fade;
+  animation-duration: 3s; */
 }
 
 .pokeball {
@@ -52,6 +57,15 @@ body {
 
   100% {
     transform: translate(0px, 0px);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 </style>

@@ -36,7 +36,8 @@
                     btnShareDetails
                     col-md-5 col-sm-5 col-5 col-lg-5 col-xl-5
                   "
-                  v-on:click="copyInfo()"
+                  @click="copyInfo"
+                  id="btnCopy"
                 >
                   <p class="mb-0 textBtnDetails">Share to my friends</p>
                 </button>
@@ -75,6 +76,7 @@ export default {
       infoPokemon: "",
       types: "",
       url: "",
+      infoToCopy: "",
     };
   },
   mounted() {
@@ -86,7 +88,6 @@ export default {
       this.$emit("showDetails", this.showDetails);
     },
     getInfoPokemon: function () {
-      console.log("holan", this.pokeFav);
       axios
         .get("https://pokeapi.co/api/v2/pokemon/" + this.pokeName)
         .then((response) => {
@@ -103,14 +104,25 @@ export default {
         .catch((e) => console.log(e));
     },
     copyInfo() {
-      var textoACopiar = this.infoPokemon.name + ",";
-      var codigoACopiar = textoACopiar;
-      var seleccion = document.createRange();
-      seleccion.selectNodeContents(codigoACopiar);
-      window.getSelection().removeAllRanges();
-      window.getSelection().addRange(seleccion);
-      var res = document.execCommand("copy");
-      window.getSelection().removeRange(seleccion);
+      document.getElementById("btnCopy").style.background = "#C00E20";
+      this.infoToCopy =
+        this.infoPokemon.name +
+        ", Wight: " +
+        this.infoPokemon.weight +
+        ", Height: " +
+        this.infoPokemon.height +
+        ", Types: " +
+        this.types;
+      this.$copyText(this.infoToCopy).then(
+        function (e) {
+          alert("Copied to Clipboard");
+          console.log(e);
+        },
+        function (e) {
+          alert("Can not copy");
+          console.log(e);
+        }
+      );
     },
   },
 };
@@ -238,6 +250,9 @@ export default {
     top: 5%;
     width: 180px;
   }
+  .container .btnClose {
+    left: 40%;
+  }
 }
 
 @media only screen and (max-width: 547px) {
@@ -247,6 +262,9 @@ export default {
     top: 5%;
     width: 180px;
   }
+  .container .btnClose {
+    left: 42%;
+  }
 }
 
 @media only screen and (max-width: 1000px) {
@@ -255,6 +273,10 @@ export default {
     left: 30%;
     top: 5%;
     width: 180px;
+  }
+
+  .container .btnClose {
+    left: 45%;
   }
 }
 </style>

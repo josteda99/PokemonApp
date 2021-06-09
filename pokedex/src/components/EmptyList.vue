@@ -7,7 +7,12 @@
           <p class="info pt-2">You look lost on your journey!</p>
           <div class="row">
             <div class="col d-flex justify-content-center">
-              <button type="button" class="btnGet g" v-on:click="toWelcome()">
+              <button
+                type="button"
+                class="btnGet g"
+                v-on:click="toWelcome()"
+                id="btnGoStart"
+              >
                 <p class="getStart">Go back home</p>
               </button>
             </div>
@@ -24,6 +29,7 @@ export default {
   methods: {
     toWelcome() {
       location.href = "Welcome";
+      document.getElementById("btnGoStart").style.background = "#C00E20";
     },
   },
 };

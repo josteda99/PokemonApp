@@ -1,5 +1,6 @@
 <template>
-  <div class="List">
+  <div class="List" style="background_color=#f9f9f9">
+    <Loader v-if="showLoader" />
     <div class="container">
       <div class="row search justify-content-center">
         <div class="col-md-10 col-sm-11 col-xs-11 col-lg-7 col-11">
@@ -19,6 +20,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-10 col-sm-11 col-xs-11 col-lg-7 col-11">
+          <!-- All Pokemons -->
           <div id="pokeNode" v-if="option == 'all'">
             <div
               v-for="pok in filterPokemons"
@@ -51,7 +53,7 @@
               </div>
             </div>
           </div>
-
+          <!-- fav Pokemons -->
           <div v-else-if="option == 'favs'">
             <div
               v-for="pok in filterPokemonsFavs"
@@ -88,7 +90,7 @@
       </div>
     </div>
 
-    <FooterBtn @option="option = $event" />
+    <FooterBtn @option="option = $event" v-if="showFooter == true" />
 
     <Details
       v-if="showDetails == true"
@@ -106,7 +108,9 @@ import Buscador from "@/components/Buscador.vue";
 import FooterBtn from "@/components/FooterBtn.vue";
 import Details from "@/components/Details.vue";
 import EmptyList from "@/components/EmptyList.vue";
+import Loader from "@/components/Loader.vue";
 import axios from "axios";
+
 export default {
   name: "List",
   components: {
@@ -114,6 +118,7 @@ export default {
     FooterBtn,
     Details,
     EmptyList,
+    Loader,
   },
   data: function () {
     return {
@@ -127,10 +132,16 @@ export default {
       showDetails: false,
       pokeFav: false,
       showEmptyList: false,
+      showLoader: true,
+      showFooter: false,
     };
   },
-  created: function () {
+  created() {
     this.getPokemons();
+    this.showLoader = true;
+  },
+  mounted() {
+    this.showToggle();
   },
   methods: {
     getPokemons: function () {
@@ -138,17 +149,14 @@ export default {
         .get("https://pokeapi.co/api/v2/pokemon")
         .then((response) => {
           this.ListPokemon = response.data.results;
-
           for (var i = 0; i < this.ListPokemon.length; i++) {
             var obj = { name: this.ListPokemon[i].name, fav: false };
             this.ListPokemons.push(obj);
           }
-          //  console.log("pokemones", this.ListPokemons);
         })
         .catch((e) => console.log(e));
     },
     addFav(pokemon) {
-      // console.log("select", this.ListPokemons);
       var btn = document.getElementById(pokemon.name);
       if (pokemon.fav) {
         pokemon.fav = false;
@@ -156,7 +164,6 @@ export default {
         pokemon.fav = true;
       }
     },
-
     showWinDetails(pokemon) {
       this.showDetails = true;
       this.pokeName = pokemon.name;
@@ -170,10 +177,15 @@ export default {
         this.showEmptyList = false;
       }
     },
+    showToggle() {
+      setTimeout(() => {
+        this.showLoader = false;
+        this.showFooter = true;
+      }, 3000);
+    },
   },
   computed: {
     filterPokemons: function () {
-      // console.log("esta vaio no  ve", this.showEmptyList);
       return this.ListPokemons.filter((pok) => {
         if (pok.name.toLowerCase().match(this.search.toLowerCase())) {
           return pok;
